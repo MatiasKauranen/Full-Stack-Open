@@ -10,3 +10,5 @@
 - JavaScriptia
 - Komponentin tila ja tapahtumankäsittely
 - Monimutkaisempi tila, Reactin debuggaus
+
+## Osa 2 - Palvelimen kanssa tapahtuva kommunikointi
