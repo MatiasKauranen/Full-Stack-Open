@@ -12,3 +12,8 @@
 - Monimutkaisempi tila, Reactin debuggaus
 
 ## Osa 2 - Palvelimen kanssa tapahtuva kommunikointi
+- Kokoelmien renderöinti ja moduulit
+- Lomakkeiden käsittely
+- Palvelimella olevan datan hakeminen
+- Palvelimella olevan datan muokkaaminen
+- Tyylien lisääminen React-sovellukseen
