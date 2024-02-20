@@ -1,35 +1,38 @@
 import React from 'react';
 
-const Header = ({ course }) => {
-  return <h1>{course.name}</h1>;
-};
+const Course = ({ course }) => {
+  const totalExercises = course.parts.reduce((acc, part) => acc + part.exercises, 0);
+
+  return (
+    <div>
+      <Header courseName={course.name} />
+      <Content parts={course.parts} />
+      <p><strong>total of {totalExercises} exercises</strong></p>
+    </div>
+  );
+}
+
+const Header = ({ courseName }) => {
+  return (
+    <h2>{courseName}</h2>
+  );
+}
 
 const Content = ({ parts }) => {
   return (
     <div>
       {parts.map(part => (
-        <Part key={part.id} part={part} />
+        <Part key={part.id} name={part.name} exercises={part.exercises} />
       ))}
     </div>
   );
-};
+}
 
-const Part = ({ part }) => {
+const Part = ({ name, exercises }) => {
   return (
-    <p>
-      {part.name} {part.exercises}
-    </p>
+    <p>{name} {exercises}</p>
   );
-};
-
-const Course = ({ course }) => {
-  return (
-    <div>
-      <Header course={course} />
-      <Content parts={course.parts} />
-    </div>
-  );
-};
+}
 
 const App = () => {
   const course = {
@@ -50,15 +53,20 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
-  };
+  }
 
   return (
     <div>
       <Course course={course} />
     </div>
-  );
-};
+  )
+}
 
 export default App;
