@@ -41,7 +41,9 @@ const App = () => {
     const newPerson = { name: newName, number: newNumber };
     axios.post('http://localhost:3001/persons', newPerson)
       .then(response => {
+        // Update local state with the new person
         setPersons([...persons, response.data]);
+        // Clear input fields
         setNewName('');
         setNewNumber('');
       })
