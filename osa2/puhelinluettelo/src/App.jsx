@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import AddPerson from './components/AddPerson';
 import PersonList from './components/PersonList';
-import axios from 'axios';
+import personService from './components/personService';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,39 +11,37 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
+    personService.getAll()
       .then(response => {
-        setPersons(response.data);
+        setPersons(response);
       })
       .catch(error => {
         console.error('Error fetching initial state:', error);
       });
   }, []);
 
-  const handleNameChange = (event) => {
+  const handleNameChange = event => {
     setNewName(event.target.value);
   };
 
-  const handleNumberChange = (event) => {
+  const handleNumberChange = event => {
     setNewNumber(event.target.value);
   };
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = event => {
     setSearchQuery(event.target.value);
   };
 
-  const addPerson = (event) => {
+  const addPerson = event => {
     event.preventDefault();
     if (!newName || !newNumber) {
       window.alert("Please enter both name and number.");
       return;
     }
     const newPerson = { name: newName, number: newNumber };
-    axios.post('http://localhost:3001/persons', newPerson)
+    personService.create(newPerson)
       .then(response => {
-        // Update local state with the new person
-        setPersons([...persons, response.data]);
-        // Clear input fields
+        setPersons([...persons, response]);
         setNewName('');
         setNewNumber('');
       })
