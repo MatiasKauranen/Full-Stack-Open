@@ -50,6 +50,19 @@ const App = () => {
       });
   };
 
+  const deletePerson = id => {
+    const confirmed = window.confirm('Are you sure you want to delete this person?');
+    if (confirmed) {
+      personService.deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+        })
+        .catch(error => {
+          console.error('Error deleting person:', error);
+        });
+    }
+  };
+
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -62,7 +75,7 @@ const App = () => {
       
       <AddPerson newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} addPerson={addPerson} />
       
-      <PersonList filteredPersons={filteredPersons} />
+      <PersonList filteredPersons={filteredPersons} deletePerson={deletePerson} />
     </div>
   );
 };
