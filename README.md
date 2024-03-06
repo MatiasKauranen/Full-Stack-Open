@@ -1,6 +1,7 @@
 # [Full Stack Open](https://fullstackopen.com/)
 
 
+
 ## [Osa 0](https://fullstackopen.com/osa0) - Web-sovelluksen toiminnan perusteet
 - Yleistä
 - Web-sovelluksen toimintaperiaatteita
