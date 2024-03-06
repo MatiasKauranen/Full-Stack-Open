@@ -38,16 +38,36 @@ const App = () => {
       window.alert("Please enter both name and number.");
       return;
     }
-    const newPerson = { name: newName, number: newNumber };
-    personService.create(newPerson)
-      .then(response => {
-        setPersons([...persons, response]);
-        setNewName('');
-        setNewNumber('');
-      })
-      .catch(error => {
-        console.error('Error adding new person:', error);
-      });
+
+    const existingPerson = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
+    if (existingPerson) {
+      const confirmed = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
+      if (confirmed) {
+        const updatedPerson = { ...existingPerson, number: newNumber };
+        personService.update(existingPerson.id, updatedPerson)
+          .then(updatedPerson => {
+            setPersons(persons.map(person =>
+              person.id === updatedPerson.id ? updatedPerson : person
+            ));
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch(error => {
+            console.error('Error updating person:', error);
+          });
+      }
+    } else {
+      const newPerson = { name: newName, number: newNumber };
+      personService.create(newPerson)
+        .then(response => {
+          setPersons([...persons, response]);
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch(error => {
+          console.error('Error adding new person:', error);
+        });
+    }
   };
 
   const deletePerson = id => {
