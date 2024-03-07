@@ -3,12 +3,26 @@ import SearchBar from './components/SearchBar';
 import AddPerson from './components/AddPerson';
 import PersonList from './components/PersonList';
 import personService from './components/personService';
+import './index.css'
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return (
+    <div className="notification">
+      {message}
+    </div>
+  );
+};
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personService.getAll()
@@ -49,6 +63,10 @@ const App = () => {
             setPersons(persons.map(person =>
               person.id === updatedPerson.id ? updatedPerson : person
             ));
+            setNotification(`Updated ${updatedPerson.name}`);
+            setTimeout(() => {
+              setNotification(null);
+            }, 5000);
             setNewName('');
             setNewNumber('');
           })
@@ -61,6 +79,10 @@ const App = () => {
       personService.create(newPerson)
         .then(response => {
           setPersons([...persons, response]);
+          setNotification(`Added ${response.name}`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
           setNewName('');
           setNewNumber('');
         })
@@ -71,11 +93,16 @@ const App = () => {
   };
 
   const deletePerson = id => {
-    const confirmed = window.confirm('Are you sure you want to delete this person?');
+    const personToDelete = persons.find(person => person.id === id);
+    const confirmed = window.confirm(`Are you sure you want to delete ${personToDelete.name}?`);
     if (confirmed) {
       personService.deletePerson(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
+          setNotification(`Deleted ${personToDelete.name}`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
         })
         .catch(error => {
           console.error('Error deleting person:', error);
@@ -92,6 +119,8 @@ const App = () => {
       <h2>Phonebook</h2>
       
       <SearchBar searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
+      
+      <Notification message={notification} />
       
       <AddPerson newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} addPerson={addPerson} />
       
